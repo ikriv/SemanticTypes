@@ -1,0 +1,10 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ include file="..\SemanticTypes\CustomType.ttinclude" #>
+
+<#
+GenerateSemanticType("SemanticTypesRun", "Length", "double", true);
+GenerateSemanticType("SemanticTypesRun", "Weight", "double", true);
+GenerateSemanticType("SemanticTypesRun", "Email", "string", false);
+#>
+

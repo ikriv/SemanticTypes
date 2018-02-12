@@ -1,0 +1,30 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".cs" #>
+
+<#
+GenerateType("SString", "string", false);
+GenerateType("SInt", "int", true);
+GenerateType("SDouble", "double", true);
+#>
+
+<#+
+void GenerateType(string name, string underlyingType, bool isValueType)
+{
+	string path = Host.ResolvePath("SemanticType.cs");
+	string rawText = File.ReadAllText(path);
+	string text = 
+		rawText
+			.Replace("SemanticType<TTag, TValue>", name + "<TTag>")
+			.Replace("As<TTag,TValue>", "As<TTag>")
+			.Replace("SemanticType", name)
+			.Replace("TValue", underlyingType)
+			.Replace("namespace " + name + "s", "namespace SemanticTypes");
+
+	if (isValueType) {
+		text = text.Replace("Value != null ? Value.GetHashCode() : 0", "Value.GetHashCode()");
+	}
+
+	this.Write(text);
+}
+#>
