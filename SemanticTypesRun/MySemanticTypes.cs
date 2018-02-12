@@ -3,7 +3,7 @@
 
 namespace SemanticTypesRun
 {
-    public struct Length
+    public partial struct Length
     {
         public double Value { get; }
 
@@ -44,6 +44,12 @@ namespace SemanticTypesRun
         {
             return !Equals(x.Value, y.Value);
         }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
+        }
     }
 
     public static partial class SemanticExtensions
@@ -51,6 +57,65 @@ namespace SemanticTypesRun
         public static Length AsLength(this double value)
         {
             return new Length(value);
+        }
+    }
+}
+namespace SemanticTypesRun
+{
+    public partial struct Area
+    {
+        public double Value { get; }
+
+        public Area(double value)
+        {
+            Value = value;
+        }
+
+        public Area(Area other)
+        {
+            Value = other.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Area)
+            {
+                var other = (Area) obj;
+                return Equals(Value, other.Value);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool operator ==(Area x, Area y)
+        {
+            return Equals(x.Value,y.Value);
+        }
+
+        public static bool operator !=(Area x, Area y)
+        {
+            return !Equals(x.Value, y.Value);
+        }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
+        }
+    }
+
+    public static partial class SemanticExtensions
+    {
+        public static Area AsArea(this double value)
+        {
+            return new Area(value);
         }
     }
 }
@@ -96,6 +161,12 @@ namespace SemanticTypesRun
         public static bool operator !=(Weight x, Weight y)
         {
             return !Equals(x.Value, y.Value);
+        }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
         }
     }
 
@@ -149,6 +220,12 @@ namespace SemanticTypesRun
         public static bool operator !=(Email x, Email y)
         {
             return !Equals(x.Value, y.Value);
+        }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
         }
     }
 

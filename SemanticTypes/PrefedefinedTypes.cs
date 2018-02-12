@@ -42,6 +42,12 @@ namespace SemanticTypes
         {
             return !Equals(x.Value, y.Value);
         }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
+        }
     }
 
     public static partial class SemanticExtensions
@@ -95,6 +101,12 @@ namespace SemanticTypes
         {
             return !Equals(x.Value, y.Value);
         }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
+        }
     }
 
     public static partial class SemanticExtensions
@@ -147,6 +159,12 @@ namespace SemanticTypes
         public static bool operator !=(SDouble<TTag> x, SDouble<TTag> y)
         {
             return !Equals(x.Value, y.Value);
+        }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
         }
     }
 

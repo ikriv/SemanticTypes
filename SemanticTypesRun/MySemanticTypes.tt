@@ -3,8 +3,9 @@
 <#@ include file="..\SemanticTypes\CustomType.ttinclude" #>
 
 <#
-GenerateSemanticType("SemanticTypesRun", "Length", "double", true);
-GenerateSemanticType("SemanticTypesRun", "Weight", "double", true);
-GenerateSemanticType("SemanticTypesRun", "Email", "string", false);
+GenerateSemanticType("SemanticTypesRun", "public partial", "Length", "double", true);
+GenerateSemanticType("SemanticTypesRun", "public partial", "Area", "double", true);
+GenerateSemanticType("SemanticTypesRun", "public", "Weight", "double", true);
+GenerateSemanticType("SemanticTypesRun", "public", "Email", "string", false);
 #>
 

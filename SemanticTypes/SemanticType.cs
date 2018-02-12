@@ -41,6 +41,12 @@
         {
             return !Equals(x.Value, y.Value);
         }
+
+        public override string ToString()
+        {
+            if (Value == null) return "";
+            return Value.ToString();
+        }
     }
 
     public static partial class SemanticExtensions
