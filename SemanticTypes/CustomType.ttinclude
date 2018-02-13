@@ -1,18 +1,27 @@
 ﻿<#@ assembly name="System.Core" #>
-<#@ assembly name="EnvDTE" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="EnvDTE" #>
 
 <#+
 void GenerateSemanticType(string @namespace, string access, string name, string underlyingType, bool isValueType)
 {
-	var serviceProvider = this.Host as IServiceProvider;
-	var dte = serviceProvider.GetService(typeof(DTE)) as DTE;
-	var project = dte.Solution.Projects.Cast<Project>().First(p=>p.Name == "SemanticTypes");
-	var projectPath = Path.GetDirectoryName(project.FullName);
+	var parentTemplateDir = Path.GetDirectoryName(Path.GetFullPath(Host.TemplateFile));
+	// assume "SemanticTypes" is at the root of the solution
+	
+	var solutionDir = Path.GetDirectoryName(parentTemplateDir);
+	string semanticTypesDir = null;
 
-	string path = Path.Combine(projectPath, "SemanticType.cs");
+	while (true)
+	{
+		semanticTypesDir = Path.Combine(solutionDir, "SemanticTypes");
+		if (Directory.Exists(semanticTypesDir)) break;
+		var parentDir = Path.GetDirectoryName(solutionDir);
+		if (parentDir == solutionDir) throw new ApplicationException("Could not find SemanticTypes directory");
+		solutionDir = parentDir;
+	}
+
+	string path = Path.Combine(semanticTypesDir, "SemanticType.cs");
+
 	string rawText = File.ReadAllText(path);
 	string text = 
 		rawText
