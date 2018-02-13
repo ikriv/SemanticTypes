@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Area.cs" />
     <Compile Include="Length.cs" />
-    <Compile Include="MySemanticTypes.cs">
+    <Compile Include="MySemanticTypes.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MySemanticTypes.tt</DependentUpon>
@@ -64,7 +64,7 @@
   <ItemGroup>
     <Content Include="MySemanticTypes.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MySemanticTypes.cs</LastGenOutput>
+      <LastGenOutput>MySemanticTypes.generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

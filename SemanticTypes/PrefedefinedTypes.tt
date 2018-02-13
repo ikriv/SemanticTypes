@@ -1,6 +1,6 @@
 ﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ import namespace="System.IO" #>
-<#@ output extension=".cs" #>
+<#@ output extension=".generated.cs" #>
 
 <#
 GenerateType("SString", "string", false);

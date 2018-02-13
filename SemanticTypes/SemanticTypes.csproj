@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PrefedefinedTypes.cs">
+    <Compile Include="PrefedefinedTypes.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PrefedefinedTypes.tt</DependentUpon>
@@ -51,7 +51,7 @@
   <ItemGroup>
     <Content Include="PrefedefinedTypes.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>PrefedefinedTypes.cs</LastGenOutput>
+      <LastGenOutput>PrefedefinedTypes.generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
