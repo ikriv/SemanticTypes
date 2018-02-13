@@ -3,39 +3,112 @@
 <#@ import namespace="System.Linq" #>
 
 <#+
-void GenerateSemanticType(string @namespace, string access, string name, string underlyingType, bool isValueType)
+void SemanticType(string access, Type wrappedType, string type)
 {
-	var parentTemplateDir = Path.GetDirectoryName(Path.GetFullPath(Host.TemplateFile));
-	// assume "SemanticTypes" is at the root of the solution
-	
-	var solutionDir = Path.GetDirectoryName(parentTemplateDir);
-	string semanticTypesDir = null;
+    var wrappedTypeName = wrappedType.FullName;
+    bool isComparable = typeof(IComparable).IsAssignableFrom(wrappedType);
+#>
+    <#=access#> partial struct <#=type#> : SemanticTypes.ISemanticType 
+                                           , SemanticTypes.ISemanticType<<#=wrappedTypeName#>>
+                                           , System.IEquatable<<#=type#>>
+<#+ if(isComparable) {
+#>                                           , System.IComparable
+                                           , System.IComparable<<#=type#>>
+<#+}#>											    
+    {
+        public <#=wrappedTypeName#> Value { get; }
 
-	while (true)
-	{
-		semanticTypesDir = Path.Combine(solutionDir, "SemanticTypes");
-		if (Directory.Exists(semanticTypesDir)) break;
-		var parentDir = Path.GetDirectoryName(solutionDir);
-		if (parentDir == solutionDir) throw new ApplicationException("Could not find SemanticTypes directory");
-		solutionDir = parentDir;
-	}
+        object SemanticTypes.ISemanticType.Value { get { return Value; } }
 
-	string path = Path.Combine(semanticTypesDir, "SemanticType.cs");
+        public <#=type#>(<#=wrappedTypeName#> value)
+        {
+            Value = value;
+        }
 
-	string rawText = File.ReadAllText(path);
-	string text = 
-		rawText
-			.Replace("public struct", access + " struct")
-			.Replace("SemanticType<TTag, TValue>", name)
-			.Replace("As<TTag,TValue>", "As" + name)
-			.Replace("SemanticType", name)
-			.Replace("TValue", underlyingType)
-			.Replace("namespace " + name + "s", "namespace " + @namespace);
+        public <#=type#>(<#=type#> other)
+        {
+            Value = other.Value;
+        }
 
-	if (isValueType) {
-		text = text.Replace("Value != null ? Value.GetHashCode() : 0", "Value.GetHashCode()");
-	}
+        public override int GetHashCode()
+        {
+<#+
+if (wrappedType.IsValueType)
+{#>
+            return Value.GetHashCode();
+<#+
+}
+else
+{#>
+            return Value != null ? Value.GetHashCode() : 0;
+<#+
+}#>
+        }
 
-	this.Write(text);
+        public override bool Equals(object obj)
+        {
+            if (obj is <#=type#>)
+            {
+                var other = (<#=type#>)obj;
+                return Equals(Value, other.Value);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool operator ==(<#=type#> x, <#=type#> y)
+        {
+            return Equals(x.Value,y.Value);
+        }
+
+        public static bool operator !=(<#=type#> x, <#=type#> y)
+        {
+            return !Equals(x.Value, y.Value);
+        }
+
+        public override string ToString()
+        {
+<#+ if (!wrappedType.IsValueType) {#>
+            if (Value == null) return "";
+<#+}#>
+            return Value.ToString();
+        }
+
+        public bool Equals(<#=type#> other)
+        {
+            return Value == other.Value;
+        }
+<#+ if (isComparable) {
+#>
+
+        public int CompareTo(object obj)
+        {
+<#+ if (!wrappedType.IsValueType) {#>
+            if (Value == null) return obj == null ? 0 : -1;
+<#+}#>
+            if (obj is <#=type#>) return Value.CompareTo(((<#=type#>)obj).Value);
+            return Value.CompareTo(obj);
+        }
+
+        public int CompareTo(<#=type#> other)
+        {
+<#+ if (!wrappedType.IsValueType) {#>
+            if (Value == null) return other.Value == null ? 0 : -1;
+<#+}#>
+            return Value.CompareTo(other.Value);
+        }
+    }
+<#+}#>
+
+    public static partial class SemanticExtensions
+    {
+        public static <#=type#> As<#=type#>(this <#=wrappedTypeName#> value)
+        {
+            return new <#=type#>(value);
+        }
+    }
+<#+
 }
 #>

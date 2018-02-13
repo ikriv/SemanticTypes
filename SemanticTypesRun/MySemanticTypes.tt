@@ -1,11 +1,12 @@
 ﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ output extension=".generated.cs" #>
 <#@ include file="..\SemanticTypes\CustomType.ttinclude" #>
-
+namespace SemanticTypesRun
+{
 <#
-GenerateSemanticType("SemanticTypesRun", "public partial", "Length", "double", true);
-GenerateSemanticType("SemanticTypesRun", "public partial", "Area", "double", true);
-GenerateSemanticType("SemanticTypesRun", "public", "Weight", "double", true);
-GenerateSemanticType("SemanticTypesRun", "public", "Email", "string", false);
+SemanticType("public", typeof(double), "Length");
+SemanticType("public", typeof(double), "Area");
+SemanticType("public", typeof(double), "Weight");
+SemanticType("public", typeof(string), "Email");
 #>
-
+}
