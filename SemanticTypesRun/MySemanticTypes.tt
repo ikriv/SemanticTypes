@@ -8,5 +8,6 @@ SemanticType("public", typeof(double), "Length");
 SemanticType("public", typeof(double), "Area");
 SemanticType("public", typeof(double), "Weight");
 SemanticType("public", typeof(string), "Email");
+SemanticType("internal", typeof(string), "UserName");
 #>
 }

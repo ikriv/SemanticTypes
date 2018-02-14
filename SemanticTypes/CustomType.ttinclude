@@ -104,7 +104,7 @@ else
 
     public static partial class SemanticExtensions
     {
-        public static <#=type#> As<#=type#>(this <#=wrappedTypeName#> value)
+        <#=access#> static <#=type#> As<#=type#>(this <#=wrappedTypeName#> value)
         {
             return new <#=type#>(value);
         }
